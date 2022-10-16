@@ -1,0 +1,62 @@
+# Создаём доменную зону
+resource "aws_route53_zone" "diplom_domain-zone" {
+  name = local.domain_name
+
+#  tags = {
+#    name = diplom_domain-zone
+#  }
+
+  depends_on = [
+    aws_instance.diplom-vm-rproxy
+  ]
+}
+
+# Создаём запись A о домене 2 уровня
+resource "aws_route53_record" "diplom_domain-l2-record" {
+  zone_id = aws_route53_zone.diplom_domain-zone.zone_id
+  name    = local.domain_name
+  type    = "A"
+  ttl     = "30"
+  records = [aws_instance.diplom-vm-rproxy.public_ip]
+}
+
+# Создаём записи А о доменах 3 уровня
+resource "aws_route53_record" "diplom_domain-l3-record-www" {
+  zone_id = aws_route53_zone.diplom_domain-zone.zone_id
+  name    = "www"
+  type    = "A"
+  ttl     = "30"
+  records = [aws_instance.diplom-vm-rproxy.public_ip]
+}
+
+resource "aws_route53_record" "diplom_domain-l3-record-gitlab" {
+  zone_id = aws_route53_zone.diplom_domain-zone.zone_id
+  name    = "gitlab"
+  type    = "A"
+  ttl     = "30"
+  records = [aws_instance.diplom-vm-rproxy.public_ip]
+}
+
+resource "aws_route53_record" "diplom_domain-l3-record-grafana" {
+  zone_id = aws_route53_zone.diplom_domain-zone.zone_id
+  name    = "grafana"
+  type    = "A"
+  ttl     = "30"
+  records = [aws_instance.diplom-vm-rproxy.public_ip]
+}
+
+resource "aws_route53_record" "diplom_domain-l3-record-prometheus" {
+  zone_id = aws_route53_zone.diplom_domain-zone.zone_id
+  name    = "prometheus"
+  type    = "A"
+  ttl     = "30"
+  records = [aws_instance.diplom-vm-rproxy.public_ip]
+}
+
+resource "aws_route53_record" "diplom_domain-l3-record-alertmanager" {
+  zone_id = aws_route53_zone.diplom_domain-zone.zone_id
+  name    = "alertmanager"
+  type    = "A"
+  ttl     = "30"
+  records = [aws_instance.diplom-vm-rproxy.public_ip]
+}

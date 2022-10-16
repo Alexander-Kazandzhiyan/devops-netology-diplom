@@ -1,0 +1,25 @@
+---
+- name: Install Mysql Cluster Management
+  hosts: db01
+##  gather_facts: false
+##  user: ubuntu
+  become: true
+  roles:
+  - mysql-cluster-management
+
+
+- name: Install Mysql Cluster Data-Nodes
+  hosts: db_nodes
+##  gather_facts: false
+##  user: ubuntu
+  become: true
+  roles:
+  - mysql-cluster-datanode
+
+- name: Install Mysql Server and Client
+  hosts: db01
+#  gather_facts: false
+#  user: ubuntu
+  become: true
+  roles:
+  - mysql-cluster-sqlnode

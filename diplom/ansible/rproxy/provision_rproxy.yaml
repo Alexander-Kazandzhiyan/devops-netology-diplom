@@ -1,0 +1,133 @@
+---
+- name: Podgotovka Sistemi na rproxy
+  hosts: rproxy
+  become: true
+
+  vars:
+    dst_hosts_file: /etc/hosts
+    src_hosts_file: ../../commonfiles/hosts
+
+  tasks:
+
+# Переименовываем хост. Значение переменной будет передаваться из командной строки в ключе команды ansible-playbook при запуске из terraform
+    - name: Set a hostname
+      ansible.builtin.hostname:
+        name: "{{ rproxy_hostname }}"
+
+# Устанавливаем Московскую временную зону
+    - name: Set timezone to Europe/Moscow
+      community.general.timezone:
+        name: Europe/Moscow
+
+# копируем файл hosts
+    - name: Copy file hosts
+      copy:
+        src:  "{{ src_hosts_file }}"
+        dest: "{{ dst_hosts_file }}"
+        force: yes
+
+# Обновляем все пакеты в системе
+    - name: Update repos
+      apt:
+        update_cache: yes
+
+    - name: set sysctl for forwarding
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        sysctl_set: true
+        reload: true
+
+#    - name: Create Iptables NAT chain
+#      iptables:
+#        table: nat
+#        chain: POSTROUTING
+#        out_interface: eth0
+#        source: 10.10.10.0/24
+#        destination: 0.0.0.0/0
+#        jump: MASQUERADE
+#        protocol:
+#        comment: Ansible NAT Masquerader
+
+
+    - name: Adding key in /root/.ssh/ for access to nodes
+      copy: src=~/.ssh/alexander-key-to-aws.pem dest=/root/.ssh/alexander-key-to-aws.pem owner=root mode=0600
+      ignore_errors: yes
+
+    - name: Adding key in /root/.ssh/ for access to nodes
+      copy: src=~/.ssh/alexander-key-to-aws.pem dest=/home/ubuntu/.ssh/alexander-key-to-aws.pem owner=ubuntu mode=0600
+      ignore_errors: yes
+
+
+# Устанавливаем nginx
+    - name: install nginx
+      apt:
+        name: nginx
+        state: latest
+
+
+# Устанавливаем клиента Lets Encript
+    - name: install LetsEncript client acme.sh
+      ansible.builtin.shell: wget -O -  https://get.acme.sh | sh -s email=7822119@gmail.com
+
+
+# Отправляем запрос на получение подписанных сертификатов и ключей от Lets Encript, с автоматическим подтверждениес в CloudFlare
+    - name: Get Certificate
+#      ansible.builtin.shell:  export CF_Token="t44iHmKOjkxjsRvyyLzw27jCQb1WMT2DSr6IUgkI" && export CF_Email="7822119@gmail.com" && /root/.acme.sh/acme.sh --issue -d {{ domain_name }} -d '*.{{ domain_name }}' --dns dns_cf  --server https://acme-staging-v02.api.letsencrypt.org/directory
+      ansible.builtin.shell:  export CF_Token="t44iHmKOjkxjsRvyyLzw27jCQb1WMT2DSr6IUgkI" && export CF_Email="7822119@gmail.com" && /root/.acme.sh/acme.sh --issue -d {{ domain_name }} -d '*.{{ domain_name }}' --dns dns_cf
+      ignore_errors: yes
+
+    - name: Creates directory
+      file:
+        path: /etc/letsencrypt/{{ domain_name }}
+        state: directory
+
+# Устанавливаем сертификаты
+    - name: install Certificate
+      ansible.builtin.shell:  /root/.acme.sh/acme.sh --install-cert --domain {{ domain_name }} --ca-file /etc/letsencrypt/{{ domain_name }}/ca.pem   --key-file /etc/letsencrypt/{{ domain_name }}/{{ domain_name }}.key.pem --fullchain-file /etc/letsencrypt/{{ domain_name }}/fullchain.pem
+      ignore_errors: yes
+
+
+    - name: install mc
+      apt:
+        name: mc
+        state: latest
+
+#    - name: install certbot
+#      apt:
+#        name: certbot
+#        state: latest
+
+#    - name: install pytho3
+#      apt:
+#        name: python3
+#        state: latest
+
+#    - name: install python3-pip
+#      apt:
+#        name: python3-pip
+#        state: latest
+
+#    - name: install ansible
+#      shell: python3 -m pip install ansible-core==2.13.1
+
+# Копируем на rproxy ключ. Он с его помощью сможет ходить по ssh на ВМ в приватной сети
+#    - name: Adding key in /root/.ssh/ for access to over VMs
+#      copy: src=~/.ssh/alexander-key-to-aws.pem dest=/root/.ssh/alexander-key-to-aws.pem owner=root mode=0600
+#      ignore_errors: yes
+
+#    - name: Create directory for playbok for Nodes
+#      file: state=directory mode=0775 dest=/root/playbook_for_web_node
+
+#    - name: Copy Playbook for nodes
+#      copy: src=../web_node/provision_web_node.yaml dest=/root/playbook_for_web_node
+#      ignore_errors: yes
+
+#    - name: Copy nodes Inventory
+#      copy: src=../web_node/inventory_web_node dest=/root/playbook_for_web_node
+#      ignore_errors: yes
+
+# Проверяем доступность web_node
+#    - name: Test ansible ping web_node
+#      ansible.builtin.shell: cd /root/playbook_for_web_node && ansible -i inventory_web_node -u ubuntu -m ping all
