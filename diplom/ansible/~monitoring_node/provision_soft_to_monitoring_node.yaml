@@ -1,0 +1,70 @@
+---
+- name: Install Soft to monitoring_node
+  hosts: monitoring_node
+  become: true
+
+#  vars:
+#    env_var:
+#      EXTERNAL_URL: "http://{{ gitlab_node_hostname }}"
+#      GITLAB_ROOT_PASSWORD: "{{ gitlab_root_password }}"
+#      GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN: "{{ gitlab_runner_init_token }}"
+  tasks:
+
+    - name: Download install script
+      get_url:
+        url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh
+        dest: /home/ubuntu/script.deb.sh
+
+    - name: Change script file ownership, group and permissions
+      ansible.builtin.file:
+        path: /home/ubuntu/script.deb.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: '0775'
+
+    - name: Run install script
+      shell: /home/ubuntu/script.deb.sh
+
+    - name: Install gitlab
+      ansible.builtin.package:
+        name: gitlab-ee
+        state: present
+      environment: "{{ env_var }}"
+
+#    - name: Show temp password
+#      shell: "cat /etc/gitlab/initial_root_password"
+#      register: command_output
+
+#    - name: Print to console
+#      debug:
+#        msg: "{{ command_output.stdout_lines }}"
+
+#    - name: Set token for user root
+#      command: gitlab-rails runner "token = User.find_by_username('root').personal_access_tokens.create(scopes:[:api], name:'Automation token'); token.set_token('"{{ gitlab_root_token }}"'); token.save!"
+#      ignore_errors: yes
+
+    - name: Adding key in /root/.ssh/ for access to nodes
+      copy: src=~/.ssh/alexander-key-to-aws.pem dest=/root/.ssh/alexander-key-to-aws.pem owner=root mode=0600
+      ignore_errors: yes
+
+
+
+#- name: Install gitlab runner on gitlabrunner_node
+#  hosts: gitlabrunner_node
+#  become: true
+
+#  tasks:
+
+#    - name: Download gitlab runner package
+#      get_url:
+#        url:  https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_amd64.deb
+#        dest: /home/ubuntu/gitlab-runner_amd64.deb
+
+#    - name: Install gitlab runner
+#      command: dpkg -i gitlab-runner_amd64.deb
+
+#    - name: Register gitlab runner to Gitlab server
+#      command: | 
+#        gitlab-runner register --non-interactive --url "http://{{ gitlab_node_hostname  }}" --registration-token "{{ gitlab_runner_init_token }}" 
+#        --executor "docker"  --docker-image alpine:latest --description "docker-runner" --maintenance-note "this runner can makes all" 
+#        --tag-list "docker,aws" --run-untagged="true" --locked="false" --access-level="not_protected"

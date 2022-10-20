@@ -228,20 +228,20 @@ resource "aws_network_interface" "diplom-private-network_interface-gitlabrunner_
 }
 
 
- # Создаём сетевой интерфейс в private-1 сети для grafana_node
-resource "aws_network_interface" "diplom-private-network_interface-grafana_node" {
+ # Создаём сетевой интерфейс в private-1 сети для monitoring_node
+resource "aws_network_interface" "diplom-private-network_interface-monitoring_node" {
 
   # Указываем подсеть
   subnet_id   = aws_subnet.diplom-private-subnet-1.id
 
   # адрес для web_node
-  private_ips = [local.grafana_node_local_ip]
+  private_ips = [local.monitoring_node_local_ip]
 
   # Подключаем группы безопасности для разрешения разного траффика
   security_groups = [aws_security_group.allow_ssh.id, aws_security_group.allow_all_output.id, aws_security_group.allow_internal_traffic.id, aws_security_group.allow_ping.id, aws_security_group.allow_web.id,]
 
   tags = {
-    Name = "diplom-private-network_interface-grafana_node"
+    Name = "diplom-private-network_interface-monitoring_node"
   }
 }
 

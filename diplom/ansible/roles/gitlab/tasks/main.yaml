@@ -1,0 +1,55 @@
+---
+- name: Reading config
+  ansible.builtin.include_vars:
+    file: variables.yaml
+    name: variables
+
+- name: Download gitlab install script
+  get_url:
+    url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh
+    dest: /home/ubuntu/script.deb.sh
+
+- name: Change script file ownership, group and permissions
+  ansible.builtin.file:
+    path: /home/ubuntu/script.deb.sh
+    owner: ubuntu
+    group: ubuntu
+    mode: '0775'
+
+- name: Run gitlab install script
+  shell: /home/ubuntu/script.deb.sh
+
+- name: Install gitlab
+  vars:
+    env_var:
+      EXTERNAL_URL: "http://{{ variables.gitlab_node_hostname }}"
+      GITLAB_ROOT_PASSWORD: "{{ variables.gitlab_root_password }}"
+      GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN: "{{ variables.gitlab_runner_init_token }}"
+  ansible.builtin.apt:
+    pkg:
+      - gitlab-ee
+  environment: "{{ env_var }}"
+  ignore_errors: yes
+
+# Создаём проект в гитлабе
+- name: Prepare Gitlab User and Project
+  block:
+    - name: install some python packages
+      ansible.builtin.apt:
+        pkg:
+          - python3
+          - python3-pip
+      ignore_errors: yes
+
+    - name: install python-gitlab
+      shell: python3 -m pip install python-gitlab
+
+    - name: Set token for user root
+      command: gitlab-rails runner "token = User.find_by_username('root').personal_access_tokens.create(scopes:[:api], name:'Automation token make by ansible'); token.set_token('"{{ variables.gitlab_root_token }}"'); token.save!"
+      ignore_errors: yes
+
+    - name: Create GitLab Project
+      community.general.gitlab_project:
+        api_url: http://{{ variables.gitlab_node_hostname }}
+        api_token: "{{ variables.gitlab_root_token }}"
+        name: "{{ variables.gitlab_project_name }}"

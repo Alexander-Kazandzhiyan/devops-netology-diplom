@@ -1,0 +1,114 @@
+---
+# Считываем переменные
+- name: Reading config
+  ansible.builtin.include_vars:
+    file: variables.yaml
+    name: variables
+
+# Переименовываем сервер
+- name: Set a hostname
+  ansible.builtin.hostname:
+    name: "{{ variables.monitoring_node_hostname }}"
+
+
+- name: Install dependency packages
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - software-properties-common
+
+- name: Grafana Deploy
+  block:
+    - name: Add Grafana repo key
+      ansible.builtin.get_url:
+        url: https://packages.grafana.com/gpg.key
+        dest: /usr/share/keyrings/grafana.key
+
+    - name: Add Grafana repo
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/grafana.key] https://packages.grafana.com/oss/deb stable main"
+        state: present
+
+    - name: Update repositories cache and install grafana  package
+      ansible.builtin.apt:
+        name: grafana-enterprise
+        update_cache: yes
+
+    - name: Configure Grafana user
+      ansible.builtin.user:
+        name: grafana
+        append: true
+        groups:
+          - root
+
+    - name: Make and Copy Config for Grafana
+      ansible.builtin.template:
+        src: "grafana.ini.j2"
+        dest: "/etc/grafana/grafana.ini"
+        backup: true
+        mode: 0644
+        owner: grafana
+
+    - name: Configure Grafana Dashboard
+      ansible.builtin.copy:
+        src: "dashboards/"
+        dest: "/etc/grafana/provisioning/dashboards"
+        backup: true
+        mode: 0644
+        owner: grafana
+
+    - name: Configure Grafana Datasources for Dashboard
+      ansible.builtin.copy:
+        src: "datasources/"
+        dest: "/etc/grafana/provisioning/datasources"
+        backup: true
+        mode: 0644
+        owner: grafana
+
+#    - name: Fix Grafana permissions
+#      ansible.builtin.file:
+#        path: /usr/share/grafana
+#        mode: 0755
+
+- name: Prometheus and Alert Manager Deploy
+  block:
+
+    - name: Install Prometheus and Alert-manager
+      ansible.builtin.apt:
+        pkg:
+        - prometheus-alertmanager
+        - prometheus
+
+    - name: Copy config for Prometheus
+      ansible.builtin.template:
+        src: "prometheus.yml.j2"
+        dest: "/etc/prometheus/prometheus.yml"
+        backup: true
+        mode: 0644
+        owner: ubuntu
+
+    - name: Copy config
+      ansible.builtin.template:
+        src: "alertmanager.yml.j2"
+        dest: "/etc/prometheus/alertmanager.yml"
+        backup: true
+        mode: 0644
+        owner: ubuntu
+
+    - name: Copy rules for Alert
+      ansible.builtin.copy:
+        src: "alert_rules.yml"
+        dest: "/etc/prometheus/alert_rules.yml"
+        backup: true
+        mode: 0644
+        owner: ubuntu
+
+- name: Start monitoring services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - prometheus
+#    - prometheus-node-exporter
+    - grafana-server
+    - prometheus-alertmanager

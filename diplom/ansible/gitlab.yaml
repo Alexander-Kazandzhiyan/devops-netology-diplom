@@ -1,0 +1,13 @@
+---
+
+# Развёртывание gitlab 
+- hosts: gitlab_node
+  become: true
+  roles:
+    - gitlab
+
+# Развёртывание gitlab runner
+- hosts: gitlabrunner_node
+  become: true
+  roles:
+    - gitlabrunner

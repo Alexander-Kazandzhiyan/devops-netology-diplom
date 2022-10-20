@@ -1,0 +1,148 @@
+---
+
+#Действия актуальные для всех серверов
+#В том числе установка node-exporter
+- hosts: all
+  become: true
+  roles:
+    - common
+
+# Переименовываем хосты. 
+# Пришлось вставить этот блок сюда, так как из самих ролей директива hosts не работает
+#---------------------------------------------------------------------
+- hosts: web_node
+  become: true
+  tasks:
+    - name: Set a hostname to web_server
+      ansible.builtin.hostname:
+        name: "{{ variables.web_node_hostname }}"
+
+- hosts: rproxy
+  become: true
+  tasks:
+    - name: Set a hostname to rproxy
+      ansible.builtin.hostname:
+        name: "{{ variables.rproxy_hostname }}"
+
+- hosts: db01
+  become: true
+  tasks:
+    - name: Set a hostname to db01
+      ansible.builtin.hostname:
+        name: "{{ variables.db01_node_hostname }}"
+
+- hosts: db02
+  become: true
+  tasks:
+    - name: Set a hostname to db02
+      ansible.builtin.hostname:
+        name: "{{ variables.db02_node_hostname }}"
+
+- hosts: gitlab_node
+  become: true
+  tasks:
+    - name: Set a hostname to gitlab
+      ansible.builtin.hostname:
+        name: "{{ variables.gitlab_node_hostname }}"
+
+- hosts: gitlabrunner_node
+  become: true
+  tasks:
+    - name: Set a hostname to gitlabrunner
+      ansible.builtin.hostname:
+        name: "{{ variables.gitlabrunner_node_hostname }}"
+
+
+- hosts: monitoring_node
+  become: true
+  tasks:
+    - name: Set a hostname to monitoring
+      ansible.builtin.hostname:
+        name: "{{ variables.monitoring_node_hostname }}"
+#---------------------------------------------------------------
+
+
+# Развёртывание rproxy c nginx на нём 
+- hosts: rproxy
+  become: true
+  roles:
+    - rproxy
+
+# Развёртывание Web-cервера c Apache и Wordpress
+- hosts: web_node
+  become: true
+  roles:
+    - webserver
+
+# Install Mysql Cluster Management
+- hosts: db01
+  become: true
+  roles:
+    - mysql-cluster-management
+
+# Install Mysql Cluster Data-Nodes
+- hosts: db_nodes
+  become: true
+  roles:
+    - mysql-cluster-datanode
+
+# Install Mysql Server and Client. Create DB for wordpress
+- hosts: db01
+  become: true
+  roles:
+    - mysql-cluster-sqlnode
+
+# TEST  Mysql Cluster
+#- hosts: db_01
+#  become: true
+#  roles:
+#    - mysql-cluster-test
+
+# Развёртывание gitlab
+- hosts: gitlab_node
+  become: true
+  roles:
+    - gitlab
+
+# Развёртывание gitlab runner
+- hosts: gitlabrunner_node
+  become: true
+  roles:
+    - gitlabrunner
+
+# Развёртывание Grafana, Prometheus, Alert Manager
+- hosts: monitoring_nodes
+  become: true
+  roles:
+    - monitoring
+
+
+
+
+
+
+# Серверы MySQL - мастер и реплика
+#- hosts: db-main
+#  roles:
+#    - mysql_common
+#    - mysql_source
+#- hosts: db-repl
+#  roles:
+#    - mysql_common
+#    - mysql_replica
+
+# GitLab и один GitLab Runner
+#- hosts: gitlab
+#  roles:
+#    - gitlab
+#- hosts: runner
+#  roles:
+#    - runner
+
+
+
+# Основной обратный прокси
+#- hosts: www
+#  roles:
+#    - nginx
+

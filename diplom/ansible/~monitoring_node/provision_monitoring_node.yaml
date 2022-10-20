@@ -1,0 +1,37 @@
+---
+- name: Podgotovka Sistemi na monitoring_nodes
+  hosts: all
+  become: true
+
+  vars:
+    dst_hosts_file: /etc/hosts
+    src_hosts_file: ../commonfiles/hosts
+
+  tasks:
+
+# Устанавливаем Московскую временную зону
+    - name: Set timezone to Europe/Moscow
+      community.general.timezone:
+        name: Europe/Moscow
+
+# копируем файл hosts
+    - name: Copy file hosts
+      copy:
+        src:  "{{ src_hosts_file }}"
+        dest: "{{ dst_hosts_file }}"
+        force: yes
+
+# Обновляем все пакеты в системе
+    - name: Update repos
+      apt:
+        update_cache: yes
+
+# Переименовываем хост. Значение переменной будет передаваться из командной строки в ключе команды ansible-playbook при запуске из terraform
+    - name: Set a hostname monitoring_node
+      ansible.builtin.hostname:
+        name: "{{ monitoring_node_hostname }}"
+
+# заливаем ключ на раннер, чтоб он потом мог загружать файлы на веб-сервер
+#    - name: Adding key for access to web-server
+#      copy: src=~/.ssh/alexander-key-to-aws.pem dest=/home/ubuntu/.ssh/alexander-key-to-aws.pem owner=ubuntu mode=0600
+#      ignore_errors: yes

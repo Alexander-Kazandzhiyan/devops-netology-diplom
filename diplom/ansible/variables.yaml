@@ -1,0 +1,57 @@
+# Имя файла ключа. Он будет создан с расширением pem
+ssh_key_filename: "alexander-key-to-aws"
+
+# Параметры сервера обратного прокси
+
+rproxy_local_ip: "192.168.0.4"
+rproxy_hostname: "citytours.ge"
+domain_name:     "citytours.ge"
+
+# Параметры ВМ для кластера mysql
+
+db01_node_local_ip: "192.168.1.4"
+db01_node_hostname: "db01.citytours.ge"
+
+db02_node_local_ip: "192.168.1.5"
+db02_node_hostname: "db02.citytours.ge"
+
+# Параметры создаваемой БД и настроек сайта
+
+db_nodes_mysql_root_password: "123456"
+db_wordpress_dbhost:          "db01.citytours.ge"
+db_wordpress_dbname:          "wordpress"
+db_wordpress_dbusername:      "wordpress"
+db_wordpress_dbuserpassword:  "wordpress"
+
+# Параметры Веб-сервера
+
+web_node_local_ip:            "192.168.1.6"
+web_node_hostname:            "app.citytours.ge"
+
+# Параметры сервера Gitlab и Gitlab runner
+
+gitlab_node_local_ip:         "192.168.1.7"
+gitlab_node_hostname:         "gitlab.citytours.ge"
+gitlab_root_password:         "2222222222"
+gitlab_root_token:            "33333333333333333333"
+gitlab_runner_init_token:     "4444444444"
+gitlab_project_name:          "Website_CICD"
+
+gitlabrunner_node_local_ip:   "192.168.1.8"
+gitlabrunner_node_hostname:   "runner.citytours.ge"
+
+# Параметры сервера мониторинга
+
+monitoring_node_local_ip:     "192.168.1.9"
+monitoring_node_hostname:     "monitoring.citytours.ge"
+
+
+# Настройки уведомлений из Alert Manager
+
+alert_mail_to: "alert@citytours.ge"
+alert_mail_from: "alert@citytours.ge"
+alert_mail_smarthost: "smtp.citytours.ge"
+alert_mail_require_tls: false
+alert_mail_auth_username: "alert@citytours.ge"
+alert_mail_auth_identity: "alert@citytours.ge"
+alert_mail_auth_password: "123456"

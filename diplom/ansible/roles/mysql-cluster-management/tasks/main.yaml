@@ -1,0 +1,39 @@
+- name: Reading config
+  ansible.builtin.include_vars:
+    file: variables.yaml
+    name: variables
+
+- name: change the directory
+  shell: cd /home/ubuntu
+
+- name: Download package
+  get_url:
+    url: https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster-community-management-server_8.0.30-1ubuntu20.04_amd64.deb
+    dest: /home/ubuntu
+
+- name: install package
+  command: dpkg -i mysql-cluster-community-management-server_8.0.30-1ubuntu20.04_amd64.deb
+
+- name: create directory
+  file:
+    path: /var/lib/mysql-cluster
+    state: directory
+
+- name: Copy config
+  template:
+    src: config.ini
+    dest: /var/lib/mysql-cluster/config.ini
+
+- name: copy ndb_mgmd.service file
+  copy:
+    src: ndb_mgmd.service
+    dest: /etc/systemd/system/ndb_mgmd.service
+
+- name: reload daemon
+  shell: systemctl daemon-reload
+
+- name: Initialize ndb_mgmd
+  service:
+    name: ndb_mgmd
+    state: started
+    enabled: yes

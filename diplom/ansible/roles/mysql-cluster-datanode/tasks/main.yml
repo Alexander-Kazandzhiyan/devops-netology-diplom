@@ -1,0 +1,59 @@
+- name: Reading config
+  ansible.builtin.include_vars:
+    file: variables.yaml
+    name: variables
+
+- name: change the directory
+  shell: cd /home/ubuntu
+
+- name: Download data-node package
+  get_url:
+    url:  https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster-community-data-node_8.0.30-1ubuntu20.04_amd64.deb
+    dest: /home/ubuntu/mysql-cluster-community-data-node_8.0.30-1ubuntu20.04_amd64.deb
+
+- name: install libclass-methodmaker-perl
+  shell: apt install libclass-methodmaker-perl
+
+- name: install data-node package
+  shell: dpkg -i mysql-cluster-community-data-node_8.0.30-1ubuntu20.04_amd64.deb
+
+- name: copy my.cnf file
+  template:
+    src: my.cnf
+    dest: /etc/my.cnf
+
+- name: Creates /usr/local/mysql/data directory
+  file:
+    path: /usr/local/mysql/data
+    state: directory
+
+- name: Install ndbd.service file
+  copy: 
+    src: ndbd.service
+    dest: /etc/systemd/system/ndbd.service
+
+- name: reload daemon
+  shell: systemctl daemon-reload
+
+- name: Initialize ndbd
+  service:
+    name: ndbd
+    state: started
+    enabled: yes
+
+#- name: Test of Cluster
+#  shell: /usr/bin/ndb_mgm -e SHOW
+#  register: command_output
+
+#- name: Print Status of Cluster
+#  debug:
+#    msg: "{{ command_output.stdout_lines }}"
+
+#- name: Test of Cluster
+#  shell: mysql -u root -p{{ variables.db_nodes_mysql_root_password }} -e 'SHOW ENGINE NDB STATUS \G'
+#  register: command_output
+
+#- name: Print Status of NDB
+#  debug:
+#    msg: "{{ command_output.stdout_lines }}"
+

@@ -1,0 +1,29 @@
+---
+- name: Reading config
+  ansible.builtin.include_vars:
+    file: variables.yaml
+    name: variables
+
+# Обновляем все пакеты в системе
+- name: Update repos
+  apt:
+    update_cache: yes
+
+# Устанавливаем Московскую временную зону
+- name: Set timezone to Europe/Moscow
+  community.general.timezone:
+    name: Europe/Moscow
+
+- name: Copy file hosts
+  ansible.builtin.copy:
+    src: "hosts"
+    dest: "/etc/hosts"
+    backup: true
+    force: yes
+    mode: 0775
+    owner: ubuntu
+
+- name: install prometheus-node-exporter
+  ansible.builtin.apt:
+    name: prometheus-node-exporter
+    state: present
