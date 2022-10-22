@@ -1,39 +1,39 @@
 ---
+# Читаем переменные
 - name: Reading variables
   ansible.builtin.include_vars:
     file: variables.yaml
     name: variables
 
-# Переименовываем хост.
-- name: Set a hostname
-  ansible.builtin.hostname:
-    name: "{{ variables.rproxy_hostname }}"
-
+# Устанавливаем нужные пакеты, включая Nginx
 - name: Install packages
   ansible.builtin.apt:
     pkg:
-      - mc
+#      - mc
       - nginx
 
 # нужен для целей отладки. можно потом удалить
-- name: Copy ssh-key to rptoxy
-  ansible.builtin.copy:
-    src: "../../common/files/{{ variables.ssh_key_filename }}.pem"
-    dest: "/home/ubuntu/.ssh/{{ variables.ssh_key_filename }}.pem"
-    mode: 0600
-    owner: ubuntu
+#- name: Copy ssh-key to rptoxy
+#  ansible.builtin.copy:
+#    src: "../../common/files/{{ variables.ssh_key_filename }}.pem"
+#    dest: "/home/ubuntu/.ssh/{{ variables.ssh_key_filename }}.pem"
+#    mode: 0600
+#    owner: ubuntu
+
 
 - name: Build HTTPS/SSL environment
   block:
 
-# Устанавливаем клиента Lets Encript
+    # Устанавливаем клиента Lets Encript
     - name: install LetsEncript client acme.sh
-      ansible.builtin.shell: wget -O -  https://get.acme.sh | sh -s email=1111111111@gmail.com
+      ansible.builtin.shell: wget -O -  https://get.acme.sh | sh -s email={{ variables.my_email }}
+#      ansible.builtin.shell: wget -O -  https://get.acme.sh | sh -s email=7822119@gmail.com
 
-# Отправляем запрос на получение подписанных сертификатов и ключей от Lets Encript, с автоматическим подтверждениес в CloudFlare
+    # Отправляем запрос на получение подписанных сертификатов и ключей от Lets Encript, с автоматическим подтверждением в CloudFlare
     - name: Get Certificate
 #      ansible.builtin.shell:  export CF_Token="t44iHmKOjkxjsRvyyLzw27jCQb1WMT2DSr6IUgkI" && export CF_Email="7822119@gmail.com" && /root/.acme.sh/acme.sh --issue -d {{ domain_name }} -d '*.{{ domain_name }}' --dns dns_cf  --server https://acme-staging-v02.api.letsencrypt.org/directory
-      ansible.builtin.shell:  export CF_Token="t44iHmKOjkxjsRvyyLzw27jCQb1WMT2DSr6IUgkI" && export CF_Email="7822119@gmail.com" && /root/.acme.sh/acme.sh --issue -d {{ variables.domain_name }} -d '*.{{ variables.domain_name }}' --dns dns_cf
+#      ansible.builtin.shell:  export CF_Token="t44iHmKOjkxjsRvyyLzw27jCQb1WMT2DSr6IUgkI" && export CF_Email="7822119@gmail.com" && /root/.acme.sh/acme.sh --issue -d {{ variables.domain_name }} -d '*.{{ variables.domain_name }}' --dns dns_cf
+      ansible.builtin.shell:  export CF_Token="{{ variables.cloudflare_api_token }}" && export CF_Email="{{ variables.my_email }}" && /root/.acme.sh/acme.sh --issue -d {{ variables.domain_name }} -d '*.{{ variables.domain_name }}' --dns dns_cf
       ignore_errors: yes
 
     - name: Creates directory
@@ -41,13 +41,15 @@
         path: /etc/letsencrypt/{{ variables.domain_name }}
         state: directory
 
-# Устанавливаем сертификаты
+    # Устанавливаем сертификаты
     - name: install Certificate
       ansible.builtin.shell:  /root/.acme.sh/acme.sh --install-cert --domain {{ variables.domain_name }} --ca-file /etc/letsencrypt/{{ variables.domain_name }}/ca.pem   --key-file /etc/letsencrypt/{{ variables.domain_name }}/{{ variables.domain_name }}.key.pem --fullchain-file /etc/letsencrypt/{{ variables.domain_name }}/fullchain.pem
       ignore_errors: yes
 
-- name: Nastriyka Nginx
+# Копируем на сервер файл настроек nginx (реализующий функции обратного прокси), заполняя его на ходу и перезапускаем nginx
+- name: Configure Nginx
   block:
+
     - name: Copy config for Nginx
       ansible.builtin.template:
         src: "nginx.conf.j2"

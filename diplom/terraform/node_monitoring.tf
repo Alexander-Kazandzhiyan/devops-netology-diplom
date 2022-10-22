@@ -1,3 +1,4 @@
+##############  Создаём ВМ мониторинга для работы Grafana+Prometheus+AlertManager  ############
 
 # Описываем создаваемую ВМ monitoring_node для сервера мониторинга
 resource "aws_instance" "diplom-vm-monitoring_node" {
@@ -17,7 +18,7 @@ resource "aws_instance" "diplom-vm-monitoring_node" {
 # Указываем ключевую пару для доступа
   key_name = aws_key_pair.kp.key_name
 
-#  depends_on = [aws_network_interface.diplom-private-network_interface-monitoring_node]
+  depends_on = [aws_network_interface.diplom-private-network_interface-monitoring_node]
 
   tags = {
     Name = "diplom-vm-monitoring_node"

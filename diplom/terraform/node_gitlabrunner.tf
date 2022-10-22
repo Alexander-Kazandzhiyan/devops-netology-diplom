@@ -1,5 +1,6 @@
+##############  Создаём ВМ для Gitlab runner ##################
 
-# Описываем создаваемую ВМ для сервера gitlab
+# Описываем создаваемую ВМ для сервера gitlab runner
 resource "aws_instance" "diplom-vm-gitlabrunner_node" {
 
 # Для создания ВМ указываем найденный нами образ, точнее его id
@@ -17,7 +18,7 @@ resource "aws_instance" "diplom-vm-gitlabrunner_node" {
 # Указываем ключевую пару для доступа
   key_name = aws_key_pair.kp.key_name
 
-#  depends_on = [aws_network_interface.diplom-private-network_interface-web_node]
+  depends_on = [aws_network_interface.diplom-private-network_interface-gitlabrunner_node]
 
   tags = {
     Name = "diplom-vm-gitlabrunner_node"

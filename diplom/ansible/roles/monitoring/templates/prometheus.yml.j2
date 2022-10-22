@@ -37,14 +37,6 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-#  - job_name: mysql
-#    static_configs:
-#      - targets: 
-#        - "{{ variables.db01_node_hostname }}:9104"
-#        - "{{ variables.db02_node_hostname }}:9104"
-#        labels:
-#          alias: mysql
-
   - job_name: node
     # If prometheus-node-exporter is installed, grab stats about the local
     # machine by default.

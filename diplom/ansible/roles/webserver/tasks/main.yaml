@@ -1,14 +1,11 @@
 ---
+# Читаем переменные
 - name: Reading config
   ansible.builtin.include_vars:
     file: variables.yaml
     name: variables
 
-# Даём хосту имя
-- name: Set a hostname
-  ansible.builtin.hostname:
-    name: "{{ variables.web_node_hostname }}"
-
+# Установка Apache и всех необходимых пакетов
 - name: Install Apache and php neededs
   ansible.builtin.apt:
     pkg:
@@ -27,14 +24,18 @@
     state: present
     force: yes
 
+# Скачиваем и устанавливаем Wordpress, конфигурируем связь с БД
 - name: Install Wordpress
   block:
+
+    # Скачиваем и распаковываем wordpress
     - name: Download and Extract WorPress
       unarchive:
         src: https://wordpress.org/latest.tar.gz
         dest: /var/www/
         remote_src: yes
 
+    # Перенастраиваем дефолтную папку с сайтом в конфиге Apache на нашу папку с wordpress
     - name: Update default Apache site
       lineinfile:
         path: /etc/apache2/sites-enabled/000-default.conf
@@ -42,9 +43,11 @@
         regexp: '(.)+DocumentRoot /var/www/html'
         line: 'DocumentRoot /var/www/wordpress'
 
+    # Создаём конфигурационный файл wordpress-а переименованием демо-конфига
     - name: Rename sample config file to config
       command: mv /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
 
+    # Прописываем в конфиге wordpress параметры подлючения к БД сайта, созданной на нашем кластере Mysql
     - name: Insert parameters to Wordpress config file
       lineinfile:
         path: /var/www/wordpress/wp-config.php
@@ -56,14 +59,8 @@
         - {'regexp': "define\\( 'DB_USER', '(.)+' \\);", 'line': "define( 'DB_USER', '{{ variables.db_wordpress_dbusername }}' );"}
         - {'regexp': "define\\( 'DB_PASSWORD', '(.)+' \\);", 'line': "define( 'DB_PASSWORD', '{{ variables.db_wordpress_dbuserpassword }}' );"}
 
-- name: Restart Apache
-  service:
-    name: apache2
-    state: restarted
-
 
 # даём права на папку с сайтом. группа ubuntu добавлена, чтобы раннер смог заливать файлы
-
 - name: Update ownership to Apache user and Ubuntu
   file:
     path: /var/www/wordpress/
@@ -74,3 +71,10 @@
 
 - name: Set the correct permissions on Wordpress directories
   command: find /var/www/wordpress/ -type d -exec chmod 770 {} \;
+
+# Перезапускаем Apache
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted
+

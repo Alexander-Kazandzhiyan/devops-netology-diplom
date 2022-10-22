@@ -1,3 +1,4 @@
+# Читаем переменные
 - name: Reading config
   ansible.builtin.include_vars:
     file: variables.yaml
@@ -19,19 +20,23 @@
     path: /var/lib/mysql-cluster
     state: directory
 
+# Копируем конфиг на сервер, по дороге заполняя его
 - name: Copy config
   template:
     src: config.ini
     dest: /var/lib/mysql-cluster/config.ini
 
+# Копируем Unit-файл на сервер
 - name: copy ndb_mgmd.service file
   copy:
     src: ndb_mgmd.service
     dest: /etc/systemd/system/ndb_mgmd.service
 
+# Перезапускаем systemd
 - name: reload daemon
   shell: systemctl daemon-reload
 
+# Запускаем службу и включаем автозапуск
 - name: Initialize ndb_mgmd
   service:
     name: ndb_mgmd

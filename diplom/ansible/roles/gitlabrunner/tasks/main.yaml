@@ -1,11 +1,14 @@
 ---
+# Читаем переменные
 - name: Reading config
   ansible.builtin.include_vars:
     file: variables.yaml
     name: variables
 
+# Устанавливаем движёк Docker так как планируем создать и использовать gitlab runner на базе docker
 - name: Install Docker Engine
   block:
+
     - name: remove other versions of docker
       ansible.builtin.apt:
         name:
@@ -15,6 +18,7 @@
           - containerd
           - runcansible
         state: absent
+
     - name: install repo key for docker for debian
       ansible.builtin.apt_key:
         url: https://download.docker.com/linux/debian/gpg
@@ -26,7 +30,7 @@
         repo: deb https://download.docker.com/linux/ubuntu focal stable
         state: present
 
-    - name: install docker for debian
+    - name: install docker
       ansible.builtin.apt:
         update_cache: true
         name:
@@ -35,8 +39,10 @@
           - containerd.io
           - docker-compose-plugin
 
+# Устанавливаем gitlab runner
 - name: Install gitlab runner
   block:
+
     - name: Download gitlab runner package
       get_url:
         url:  https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_amd64.deb
@@ -45,7 +51,7 @@
     - name: Install gitlab runner
       command: dpkg -i gitlab-runner_amd64.deb
 
-# ключ понадобится раннеру для выкладывания файлов на веб-сервер
+# Копируем на runner ssh-ключ, который понадобится раннеру для выкладывания файлов на веб-сервер
 - name: Copy ssh-key to gitlabrunner
   ansible.builtin.copy:
     src: "../../common/files/{{ variables.ssh_key_filename }}.pem"
@@ -53,11 +59,15 @@
     mode: 0600
     owner: ubuntu
 
-
-# регистрируем gitlab-runner на сервере gitab. Он будет на основе docker внутрь прокидываем папку где лежит ключ для того, чтобы раннер смог выгружать файлы на вебсервер. Важно, также указать режим сети докера, как host.
+# Регистрируем gitlab-runner на сервере gitab. Он будет на основе docker внутрь контейнера монтируем папку где лежит ключ для того, чтобы раннер смог выгружать файлы на вебсервер. 
+# Важно, также указать режим сети докера, как host.
 - name: Register gitlab runner to Gitlab server
   command: |
     gitlab-runner register --non-interactive --url "http://{{ variables.gitlab_node_hostname  }}" --registration-token "{{ variables.gitlab_runner_init_token }}"
-    --executor "docker"  --docker-image "ubuntu:latest" --description "docker-runner" --maintenance-note "this runner can makes all"
+    --executor "docker"  --docker-image "alpine:latest" --description "docker-runner" --maintenance-note "this runner can makes all"
     --tag-list "docker,aws" --run-untagged="true" --locked="false" --access-level="not_protected" --docker-network-mode="host" --docker-volumes "/home/ubuntu/.ssh:/ssh"
+
+#    gitlab-runner register --non-interactive --url "http://{{ variables.gitlab_node_hostname  }}" --registration-token "{{ variables.gitlab_runner_init_token }}"
+#    --executor "docker"  --docker-image "ubuntu:latest" --description "docker-runner" --maintenance-note "this runner can makes all"
+#    --tag-list "docker,aws" --run-untagged="true" --locked="false" --access-level="not_protected" --docker-network-mode="host" --docker-volumes "/home/ubuntu/.ssh:/ssh"
 

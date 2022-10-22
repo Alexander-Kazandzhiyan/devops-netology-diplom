@@ -1,18 +1,32 @@
+# Переменные задают основные параметры проекта
+
+# Внимание! Некоторые переменные,объявленные и  использованные в Ansible, также используются  в Terraform
+# поэтому они дублируются в файле ../terraform/variables.tf
+# Меняя значения, следите за синхронностью изменений!
+
 # Имя файла ключа. Он будет создан с расширением pem
 ssh_key_filename: "alexander-key-to-aws"
 
+# Токен для управления CloudFlare DNS
+cloudflare_api_token: "t44iHmKOjkxjsRvyyLzw27jCQb1WMT2DSr6IUgkI"
+
+# Мой почтовый ящик (на него же Cloudflare зарегистрирован)
+my_email: "7822119@gmail.com"
+
 # Параметры сервера обратного прокси
 
-rproxy_local_ip: "192.168.0.4"
+#rproxy_local_ip: "192.168.0.4"
 rproxy_hostname: "citytours.ge"
+
+# Доменное имя, использованное в проекте
 domain_name:     "citytours.ge"
 
 # Параметры ВМ для кластера mysql
 
-db01_node_local_ip: "192.168.1.4"
+#db01_node_local_ip: "192.168.1.4"
 db01_node_hostname: "db01.citytours.ge"
 
-db02_node_local_ip: "192.168.1.5"
+#db02_node_local_ip: "192.168.1.5"
 db02_node_hostname: "db02.citytours.ge"
 
 # Параметры создаваемой БД и настроек сайта
@@ -25,30 +39,31 @@ db_wordpress_dbuserpassword:  "wordpress"
 
 # Параметры Веб-сервера
 
-web_node_local_ip:            "192.168.1.6"
+#web_node_local_ip:            "192.168.1.6"
 web_node_hostname:            "app.citytours.ge"
 
 # Параметры сервера Gitlab и Gitlab runner
 
-gitlab_node_local_ip:         "192.168.1.7"
+#gitlab_node_local_ip:         "192.168.1.7"
 gitlab_node_hostname:         "gitlab.citytours.ge"
 gitlab_root_password:         "2222222222"
 gitlab_root_token:            "33333333333333333333"
 gitlab_runner_init_token:     "4444444444"
 gitlab_project_name:          "Website_CICD"
 
-gitlabrunner_node_local_ip:   "192.168.1.8"
+#gitlabrunner_node_local_ip:   "192.168.1.8"
 gitlabrunner_node_hostname:   "runner.citytours.ge"
 
 # Параметры сервера мониторинга
 
-monitoring_node_local_ip:     "192.168.1.9"
+#monitoring_node_local_ip:     "192.168.1.9"
 monitoring_node_hostname:     "monitoring.citytours.ge"
 
 
 # Настройки уведомлений из Alert Manager
 
 alert_mail_to: "alert@citytours.ge"
+#alert_mail_to: {{ my-email }}
 alert_mail_from: "alert@citytours.ge"
 alert_mail_smarthost: "smtp.citytours.ge"
 alert_mail_require_tls: false

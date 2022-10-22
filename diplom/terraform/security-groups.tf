@@ -1,3 +1,7 @@
+##############  Создаём группы безопасности в AWS   ################
+### По-умолчанию для ВМ в AWS любой траффик запрещён. 
+### Чтобы траффик пошёл, необходимо создать правила, описывающие разрешённые сетевые взаимодействия для всех ВМ
+
 # Создаём группу безопасности для доступа по ssh
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
@@ -69,14 +73,12 @@ resource "aws_security_group" "allow_internal_traffic" {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-#    cidr_blocks      = ["192.168.0.0/16"]
      cidr_blocks      = [local.cidr_vpc]
   }
   egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-#    cidr_blocks      = ["192.168.0.0/16"]
      cidr_blocks      = [local.cidr_vpc]
   }
 

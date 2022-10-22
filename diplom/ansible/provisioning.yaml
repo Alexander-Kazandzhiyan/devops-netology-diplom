@@ -1,13 +1,13 @@
 ---
 
-#Действия актуальные для всех серверов
-#В том числе установка node-exporter
+# Выполняем Действия актуальные для всех серверов
+# В том числе установка node-exporter
 - hosts: all
   become: true
   roles:
     - common
 
-# Переименовываем хосты. 
+# Переименовываем все серверы. То есть меняем внутри них hostname
 # Пришлось вставить этот блок сюда, так как из самих ролей директива hosts не работает
 #---------------------------------------------------------------------
 - hosts: web_node
@@ -52,7 +52,6 @@
       ansible.builtin.hostname:
         name: "{{ variables.gitlabrunner_node_hostname }}"
 
-
 - hosts: monitoring_node
   become: true
   tasks:
@@ -74,29 +73,24 @@
   roles:
     - webserver
 
-# Install Mysql Cluster Management
+# Установка Mysql Cluster Management на первый срвер БД
 - hosts: db01
   become: true
   roles:
     - mysql-cluster-management
 
-# Install Mysql Cluster Data-Nodes
+# Установка Mysql Cluster Data-Nodes на оба сервера БД
 - hosts: db_nodes
   become: true
   roles:
     - mysql-cluster-datanode
 
-# Install Mysql Server and Client. Create DB for wordpress
+# Установка Mysql Server and Client на первый сервер БД
+# А также создаём БД для сайта на wordpress
 - hosts: db01
   become: true
   roles:
     - mysql-cluster-sqlnode
-
-# TEST  Mysql Cluster
-#- hosts: db_01
-#  become: true
-#  roles:
-#    - mysql-cluster-test
 
 # Развёртывание gitlab
 - hosts: gitlab_node
@@ -115,34 +109,3 @@
   become: true
   roles:
     - monitoring
-
-
-
-
-
-
-# Серверы MySQL - мастер и реплика
-#- hosts: db-main
-#  roles:
-#    - mysql_common
-#    - mysql_source
-#- hosts: db-repl
-#  roles:
-#    - mysql_common
-#    - mysql_replica
-
-# GitLab и один GitLab Runner
-#- hosts: gitlab
-#  roles:
-#    - gitlab
-#- hosts: runner
-#  roles:
-#    - runner
-
-
-
-# Основной обратный прокси
-#- hosts: www
-#  roles:
-#    - nginx
-

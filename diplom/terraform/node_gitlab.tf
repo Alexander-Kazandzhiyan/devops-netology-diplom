@@ -1,3 +1,4 @@
+##############  Создаём ВМ для Gitlab ############
 
 # Описываем создаваемую ВМ для сервера gitlab
 resource "aws_instance" "diplom-vm-gitlab_node" {
@@ -20,12 +21,9 @@ resource "aws_instance" "diplom-vm-gitlab_node" {
 root_block_device {
     volume_size = 20 # in GB
     volume_type = "gp2"
-#    encrypted   = false
-#    kms_key_id  = data.aws_kms_key.customer_master_key.arn
   }
 
-
-#  depends_on = [aws_network_interface.diplom-private-network_interface-web_node]
+  depends_on = [aws_network_interface.diplom-private-network_interface-gitlab_node]
 
   tags = {
     Name = "diplom-vm-gitlab_node"

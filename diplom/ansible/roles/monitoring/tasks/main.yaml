@@ -5,20 +5,17 @@
     file: variables.yaml
     name: variables
 
-# Переименовываем сервер
-- name: Set a hostname
-  ansible.builtin.hostname:
-    name: "{{ variables.monitoring_node_hostname }}"
-
-
+# Устанавливаем нужные пакеты
 - name: Install dependency packages
   ansible.builtin.apt:
     pkg:
       - apt-transport-https
       - software-properties-common
 
+# Устанавливаем Grafana
 - name: Grafana Deploy
   block:
+
     - name: Add Grafana repo key
       ansible.builtin.get_url:
         url: https://packages.grafana.com/gpg.key
@@ -41,6 +38,7 @@
         groups:
           - root
 
+    # Копируем, на ходу заполняя, файл настроек Grafana
     - name: Make and Copy Config for Grafana
       ansible.builtin.template:
         src: "grafana.ini.j2"
@@ -49,6 +47,7 @@
         mode: 0644
         owner: grafana
 
+    # Закачиваем на сервер папку с уже заготовленным дашбордом
     - name: Configure Grafana Dashboard
       ansible.builtin.copy:
         src: "dashboards/"
@@ -57,6 +56,7 @@
         mode: 0644
         owner: grafana
 
+    # Закачиваем на сервер папку с файлом, описывающим источник данных Prometheus
     - name: Configure Grafana Datasources for Dashboard
       ansible.builtin.copy:
         src: "datasources/"
@@ -70,15 +70,18 @@
 #        path: /usr/share/grafana
 #        mode: 0755
 
+# Устанавливаем Prometheus и Alert Manager
 - name: Prometheus and Alert Manager Deploy
   block:
 
+    # Установка
     - name: Install Prometheus and Alert-manager
       ansible.builtin.apt:
         pkg:
         - prometheus-alertmanager
         - prometheus
 
+    # Закачиваем на сервер файл настроек Prometheus, заполняя его на ходу
     - name: Copy config for Prometheus
       ansible.builtin.template:
         src: "prometheus.yml.j2"
@@ -87,6 +90,7 @@
         mode: 0644
         owner: ubuntu
 
+    # Закачиваем на сервер файл настроек Alert Manager, заполняя его на ходу
     - name: Copy config
       ansible.builtin.template:
         src: "alertmanager.yml.j2"
@@ -95,6 +99,7 @@
         mode: 0644
         owner: ubuntu
 
+    # Закачиваем на сервер файл настроек уведомлений с описанием триггеров
     - name: Copy rules for Alert
       ansible.builtin.copy:
         src: "alert_rules.yml"
@@ -103,12 +108,12 @@
         mode: 0644
         owner: ubuntu
 
+# Перезапускаем все установленные продукты
 - name: Start monitoring services
   ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
   loop:
     - prometheus
-#    - prometheus-node-exporter
     - grafana-server
     - prometheus-alertmanager

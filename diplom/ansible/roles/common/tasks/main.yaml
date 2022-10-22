@@ -1,4 +1,5 @@
 ---
+# Читаем переменные
 - name: Reading config
   ansible.builtin.include_vars:
     file: variables.yaml
@@ -14,6 +15,7 @@
   community.general.timezone:
     name: Europe/Moscow
 
+# Копируем на сервер файл hosts, созданный Terraform-ом
 - name: Copy file hosts
   ansible.builtin.copy:
     src: "hosts"
@@ -23,6 +25,7 @@
     mode: 0775
     owner: ubuntu
 
+# Устанавливаем Node-exporter
 - name: install prometheus-node-exporter
   ansible.builtin.apt:
     name: prometheus-node-exporter

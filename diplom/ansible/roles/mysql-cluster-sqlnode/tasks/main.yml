@@ -1,8 +1,10 @@
+# Читаем переменные
 - name: Reading config
   ansible.builtin.include_vars:
     file: variables.yaml
     name: variables
 
+# Устанавливаем зависимости
 - name: Install dependencies
   apt:
     package:
@@ -10,8 +12,8 @@
         - libmecab2
     state: present
     force: yes
-    update_cache: yes
 
+# Скачиваем и устанавливаем Все элементы Mysql, включая Сервер и Клиент
 - name: Download mysql common pack
   get_url:
     url: https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-common_8.0.30-1ubuntu20.04_amd64.deb
@@ -65,7 +67,8 @@
     url: https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster-community-server_8.0.30-1ubuntu20.04_amd64.deb
     dest: /home/ubuntu/
 
-# Инсталлятор mysql-cluster-community-server  переходит в интерактивный режим и не выполняеся в фоне.
+# На этом месте возникла тяжёлая проблема, отнявшая очень много времени
+# Инсталлятор mysql-cluster-community-server  переходит в интерактивный режим и не выполняеся в фоне. Он задаёт вопросы про пароль рута и др.
 # Следующие 3 таски делают как-бы автоответы на вопросы и инсталлятор потом выполнится без вопросов.
 
 - name: Make answer for root password for installing mysql-community-server
@@ -99,12 +102,35 @@
 - name: Create myslq user
   user: name=mysql system=yes createhome=no group=mysql
 
+# Копируем файл настроек Mysql сервера, заполняя его на ходу.
 - name: Install config
   template: src=my.cnf dest=/etc/mysql/my.cnf
 
+# Запускаем сервер и включаем авто-старт
 - name: Activate init script and start mysql server
   service: name=mysql.service enabled=yes state=restarted
 
+# Создаём БД для wordpress
+- name: Create a new database called wordpress
+  mysql_db:
+    login_user: root
+    login_password: "{{ variables.db_nodes_mysql_root_password }}"
+    name: "{{ variables.db_wordpress_dbname }}"
+    state: present
+
+# Создаём юзера для работы сайта с базой и Настраиваем ему право удалённоо подключения к серверу БД
+- name: Configure new MySQL user wordpress for Wordpress connect to BD form any host
+  mysql_user:
+    login_user: root
+    login_password: "{{ variables.db_nodes_mysql_root_password }}"
+    name: "{{ variables.db_wordpress_dbusername }}"
+    password: "{{ variables.db_wordpress_dbuserpassword }}"
+    host: '%'
+    priv: '{{ variables.db_wordpress_dbname }}.*:ALL'
+#    priv: 'wordpress.*:ALL'
+
+
+# ----------- Проверка состояния кластера ------------------
 - name: Test of Cluster
   shell: /usr/bin/ndb_mgm -e SHOW
   register: command_output
@@ -120,20 +146,4 @@
 - name: Print Status of NDB
   debug:
     msg: "{{ command_output.stdout_lines }}"
-
-- name: Create a new database called wordpress
-  mysql_db:
-    login_user: root
-    login_password: "{{ variables.db_nodes_mysql_root_password }}"
-    name: wordpress
-    state: present
-
-- name: Configure new MySQL user wordpress for Wordpress connect to BD form any host
-  mysql_user:
-    login_user: root
-    login_password: "{{ variables.db_nodes_mysql_root_password }}"
-    name: wordpress
-    password: wordpress
-    host: '%'
-    priv: 'wordpress.*:ALL'
 

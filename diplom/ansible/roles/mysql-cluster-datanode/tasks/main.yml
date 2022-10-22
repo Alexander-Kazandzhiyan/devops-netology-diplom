@@ -1,3 +1,4 @@
+# Читаем файл с переменными
 - name: Reading config
   ansible.builtin.include_vars:
     file: variables.yaml
@@ -17,6 +18,7 @@
 - name: install data-node package
   shell: dpkg -i mysql-cluster-community-data-node_8.0.30-1ubuntu20.04_amd64.deb
 
+# Копируем на сервер файл с настройками, до дороге заполняя его
 - name: copy my.cnf file
   template:
     src: my.cnf
@@ -40,20 +42,4 @@
     name: ndbd
     state: started
     enabled: yes
-
-#- name: Test of Cluster
-#  shell: /usr/bin/ndb_mgm -e SHOW
-#  register: command_output
-
-#- name: Print Status of Cluster
-#  debug:
-#    msg: "{{ command_output.stdout_lines }}"
-
-#- name: Test of Cluster
-#  shell: mysql -u root -p{{ variables.db_nodes_mysql_root_password }} -e 'SHOW ENGINE NDB STATUS \G'
-#  register: command_output
-
-#- name: Print Status of NDB
-#  debug:
-#    msg: "{{ command_output.stdout_lines }}"
 
