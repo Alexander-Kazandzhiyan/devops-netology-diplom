@@ -1,0 +1,21 @@
+stages:
+  - deploy-to-site
+
+#variables:
+#  GIT_CURL_VERBOSE: 1
+#  GIT_TRACE: 1
+
+deploy-to-site:
+  stage: deploy-to-site
+  before_script:
+    - echo "1. Устанавливаем git" 
+    - apk add git openssh
+
+  script:
+    - echo "Сейчас мы закачаем все файлы из папки wordpress репозитория на сайт" 
+    - echo =====================================================================
+    
+    - echo "2. Клонируем репозиторий, для получения файлов для сайта" 
+    - git clone $CI_REPOSITORY_URL
+
+    - echo "3. Копируем файлы на веб-сервер" 

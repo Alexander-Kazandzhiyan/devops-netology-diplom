@@ -1,0 +1,1758 @@
+$ terraform apply
+data.cloudflare_zone.domain-zone: Reading...
+data.cloudflare_zone.domain-zone: Read complete after 2s [id=8b593594cfe4ab6f759b50457ca69118]
+data.aws_region.current: Reading...
+data.aws_ami.ubuntu: Reading...
+data.aws_region.current: Read complete after 0s [id=us-east-1]
+data.aws_ami.ubuntu: Read complete after 2s [id=ami-01d08089481510ba2]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_default_route_table.diplom-default-route-table will be created
+  + resource "aws_default_route_table" "diplom-default-route-table" {
+      + arn                    = (known after apply)
+      + default_route_table_id = (known after apply)
+      + id                     = (known after apply)
+      + owner_id               = (known after apply)
+      + route                  = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + destination_prefix_list_id = ""
+              + egress_only_gateway_id     = ""
+              + gateway_id                 = (known after apply)
+              + instance_id                = ""
+              + ipv6_cidr_block            = ""
+              + nat_gateway_id             = ""
+              + network_interface_id       = ""
+              + transit_gateway_id         = ""
+              + vpc_endpoint_id            = ""
+              + vpc_peering_connection_id  = ""
+            },
+        ]
+      + tags                   = {
+          + "Name" = "diplom-default-route-table"
+        }
+      + tags_all               = {
+          + "Name" = "diplom-default-route-table"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_eip.diplom-elastic-ip-rproxy will be created
+  + resource "aws_eip" "diplom-elastic-ip-rproxy" {
+      + allocation_id             = (known after apply)
+      + associate_with_private_ip = "192.168.0.4"
+      + association_id            = (known after apply)
+      + carrier_ip                = (known after apply)
+      + customer_owned_ip         = (known after apply)
+      + domain                    = (known after apply)
+      + id                        = (known after apply)
+      + instance                  = (known after apply)
+      + network_border_group      = (known after apply)
+      + network_interface         = (known after apply)
+      + private_dns               = (known after apply)
+      + private_ip                = (known after apply)
+      + public_dns                = (known after apply)
+      + public_ip                 = (known after apply)
+      + public_ipv4_pool          = (known after apply)
+      + tags_all                  = (known after apply)
+      + vpc                       = true
+    }
+
+  # aws_eip.diplom-elastic-ip_for_nat-gw will be created
+  + resource "aws_eip" "diplom-elastic-ip_for_nat-gw" {
+      + allocation_id        = (known after apply)
+      + association_id       = (known after apply)
+      + carrier_ip           = (known after apply)
+      + customer_owned_ip    = (known after apply)
+      + domain               = (known after apply)
+      + id                   = (known after apply)
+      + instance             = (known after apply)
+      + network_border_group = (known after apply)
+      + network_interface    = (known after apply)
+      + private_dns          = (known after apply)
+      + private_ip           = (known after apply)
+      + public_dns           = (known after apply)
+      + public_ip            = (known after apply)
+      + public_ipv4_pool     = (known after apply)
+      + tags                 = {
+          + "Name" = "diplom-elastic-ip_for_nat-gw"
+        }
+      + tags_all             = {
+          + "Name" = "diplom-elastic-ip_for_nat-gw"
+        }
+      + vpc                  = true
+    }
+
+  # aws_instance.diplom-vm-db_node[0] will be created
+  + resource "aws_instance" "diplom-vm-db_node" {
+      + ami                                  = "ami-01d08089481510ba2"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.small"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "alexander-key-to-aws"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vm-db_node_1"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vm-db_node_1"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = false
+          + device_index          = 0
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_instance.diplom-vm-db_node[1] will be created
+  + resource "aws_instance" "diplom-vm-db_node" {
+      + ami                                  = "ami-01d08089481510ba2"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.small"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "alexander-key-to-aws"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vm-db_node_2"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vm-db_node_2"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = false
+          + device_index          = 0
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_instance.diplom-vm-gitlab_node will be created
+  + resource "aws_instance" "diplom-vm-gitlab_node" {
+      + ami                                  = "ami-01d08089481510ba2"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.xlarge"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "alexander-key-to-aws"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vm-gitlab_node"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vm-gitlab_node"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = false
+          + device_index          = 0
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 20
+          + volume_type           = "gp2"
+        }
+    }
+
+  # aws_instance.diplom-vm-gitlabrunner_node will be created
+  + resource "aws_instance" "diplom-vm-gitlabrunner_node" {
+      + ami                                  = "ami-01d08089481510ba2"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "alexander-key-to-aws"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vm-gitlabrunner_node"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vm-gitlabrunner_node"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = false
+          + device_index          = 0
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_instance.diplom-vm-monitoring_node will be created
+  + resource "aws_instance" "diplom-vm-monitoring_node" {
+      + ami                                  = "ami-01d08089481510ba2"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "alexander-key-to-aws"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vm-monitoring_node"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vm-monitoring_node"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = false
+          + device_index          = 0
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_instance.diplom-vm-rproxy will be created
+  + resource "aws_instance" "diplom-vm-rproxy" {
+      + ami                                  = "ami-01d08089481510ba2"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "alexander-key-to-aws"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vm-rproxy"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vm-rproxy"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = false
+          + device_index          = 0
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_instance.diplom-vm-web_node will be created
+  + resource "aws_instance" "diplom-vm-web_node" {
+      + ami                                  = "ami-01d08089481510ba2"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "alexander-key-to-aws"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vm-web_node"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vm-web_node"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = false
+          + device_index          = 0
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_internet_gateway.diplom-igw will be created
+  + resource "aws_internet_gateway" "diplom-igw" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + tags     = {
+          + "Name" = "diplom-internet-gateway"
+        }
+      + tags_all = {
+          + "Name" = "diplom-internet-gateway"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_key_pair.kp will be created
+  + resource "aws_key_pair" "kp" {
+      + arn             = (known after apply)
+      + fingerprint     = (known after apply)
+      + id              = (known after apply)
+      + key_name        = "alexander-key-to-aws"
+      + key_name_prefix = (known after apply)
+      + key_pair_id     = (known after apply)
+      + public_key      = (known after apply)
+      + tags_all        = (known after apply)
+    }
+
+  # aws_nat_gateway.diplom-nat-gw will be created
+  + resource "aws_nat_gateway" "diplom-nat-gw" {
+      + allocation_id        = (known after apply)
+      + connectivity_type    = "public"
+      + id                   = (known after apply)
+      + network_interface_id = (known after apply)
+      + private_ip           = (known after apply)
+      + public_ip            = (known after apply)
+      + subnet_id            = (known after apply)
+      + tags                 = {
+          + "Name" = "diplom-nat-gw"
+        }
+      + tags_all             = {
+          + "Name" = "diplom-nat-gw"
+        }
+    }
+
+  # aws_network_interface.diplom-private-network_interface-db_node[0] will be created
+  + resource "aws_network_interface" "diplom-private-network_interface-db_node" {
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + interface_type            = (known after apply)
+      + ipv4_prefix_count         = (known after apply)
+      + ipv4_prefixes             = (known after apply)
+      + ipv6_address_count        = (known after apply)
+      + ipv6_address_list         = (known after apply)
+      + ipv6_address_list_enabled = false
+      + ipv6_addresses            = (known after apply)
+      + ipv6_prefix_count         = (known after apply)
+      + ipv6_prefixes             = (known after apply)
+      + mac_address               = (known after apply)
+      + outpost_arn               = (known after apply)
+      + owner_id                  = (known after apply)
+      + private_dns_name          = (known after apply)
+      + private_ip                = (known after apply)
+      + private_ip_list           = (known after apply)
+      + private_ip_list_enabled   = false
+      + private_ips               = [
+          + "192.168.1.4",
+        ]
+      + private_ips_count         = (known after apply)
+      + security_groups           = (known after apply)
+      + source_dest_check         = true
+      + subnet_id                 = (known after apply)
+      + tags                      = {
+          + "Name" = "diplom-private-network_interface-db_0_node"
+        }
+      + tags_all                  = {
+          + "Name" = "diplom-private-network_interface-db_0_node"
+        }
+
+      + attachment {
+          + attachment_id = (known after apply)
+          + device_index  = (known after apply)
+          + instance      = (known after apply)
+        }
+    }
+
+  # aws_network_interface.diplom-private-network_interface-db_node[1] will be created
+  + resource "aws_network_interface" "diplom-private-network_interface-db_node" {
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + interface_type            = (known after apply)
+      + ipv4_prefix_count         = (known after apply)
+      + ipv4_prefixes             = (known after apply)
+      + ipv6_address_count        = (known after apply)
+      + ipv6_address_list         = (known after apply)
+      + ipv6_address_list_enabled = false
+      + ipv6_addresses            = (known after apply)
+      + ipv6_prefix_count         = (known after apply)
+      + ipv6_prefixes             = (known after apply)
+      + mac_address               = (known after apply)
+      + outpost_arn               = (known after apply)
+      + owner_id                  = (known after apply)
+      + private_dns_name          = (known after apply)
+      + private_ip                = (known after apply)
+      + private_ip_list           = (known after apply)
+      + private_ip_list_enabled   = false
+      + private_ips               = [
+          + "192.168.1.5",
+        ]
+      + private_ips_count         = (known after apply)
+      + security_groups           = (known after apply)
+      + source_dest_check         = true
+      + subnet_id                 = (known after apply)
+      + tags                      = {
+          + "Name" = "diplom-private-network_interface-db_1_node"
+        }
+      + tags_all                  = {
+          + "Name" = "diplom-private-network_interface-db_1_node"
+        }
+
+      + attachment {
+          + attachment_id = (known after apply)
+          + device_index  = (known after apply)
+          + instance      = (known after apply)
+        }
+    }
+
+  # aws_network_interface.diplom-private-network_interface-gitlab_node will be created
+  + resource "aws_network_interface" "diplom-private-network_interface-gitlab_node" {
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + interface_type            = (known after apply)
+      + ipv4_prefix_count         = (known after apply)
+      + ipv4_prefixes             = (known after apply)
+      + ipv6_address_count        = (known after apply)
+      + ipv6_address_list         = (known after apply)
+      + ipv6_address_list_enabled = false
+      + ipv6_addresses            = (known after apply)
+      + ipv6_prefix_count         = (known after apply)
+      + ipv6_prefixes             = (known after apply)
+      + mac_address               = (known after apply)
+      + outpost_arn               = (known after apply)
+      + owner_id                  = (known after apply)
+      + private_dns_name          = (known after apply)
+      + private_ip                = (known after apply)
+      + private_ip_list           = (known after apply)
+      + private_ip_list_enabled   = false
+      + private_ips               = [
+          + "192.168.1.7",
+        ]
+      + private_ips_count         = (known after apply)
+      + security_groups           = (known after apply)
+      + source_dest_check         = true
+      + subnet_id                 = (known after apply)
+      + tags                      = {
+          + "Name" = "diplom-private-network_interface-gitlab_node"
+        }
+      + tags_all                  = {
+          + "Name" = "diplom-private-network_interface-gitlab_node"
+        }
+
+      + attachment {
+          + attachment_id = (known after apply)
+          + device_index  = (known after apply)
+          + instance      = (known after apply)
+        }
+    }
+
+  # aws_network_interface.diplom-private-network_interface-gitlabrunner_node will be created
+  + resource "aws_network_interface" "diplom-private-network_interface-gitlabrunner_node" {
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + interface_type            = (known after apply)
+      + ipv4_prefix_count         = (known after apply)
+      + ipv4_prefixes             = (known after apply)
+      + ipv6_address_count        = (known after apply)
+      + ipv6_address_list         = (known after apply)
+      + ipv6_address_list_enabled = false
+      + ipv6_addresses            = (known after apply)
+      + ipv6_prefix_count         = (known after apply)
+      + ipv6_prefixes             = (known after apply)
+      + mac_address               = (known after apply)
+      + outpost_arn               = (known after apply)
+      + owner_id                  = (known after apply)
+      + private_dns_name          = (known after apply)
+      + private_ip                = (known after apply)
+      + private_ip_list           = (known after apply)
+      + private_ip_list_enabled   = false
+      + private_ips               = [
+          + "192.168.1.8",
+        ]
+      + private_ips_count         = (known after apply)
+      + security_groups           = (known after apply)
+      + source_dest_check         = true
+      + subnet_id                 = (known after apply)
+      + tags                      = {
+          + "Name" = "diplom-private-network_interface-gitlabrunner_node"
+        }
+      + tags_all                  = {
+          + "Name" = "diplom-private-network_interface-gitlabrunner_node"
+        }
+
+      + attachment {
+          + attachment_id = (known after apply)
+          + device_index  = (known after apply)
+          + instance      = (known after apply)
+        }
+    }
+
+  # aws_network_interface.diplom-private-network_interface-monitoring_node will be created
+  + resource "aws_network_interface" "diplom-private-network_interface-monitoring_node" {
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + interface_type            = (known after apply)
+      + ipv4_prefix_count         = (known after apply)
+      + ipv4_prefixes             = (known after apply)
+      + ipv6_address_count        = (known after apply)
+      + ipv6_address_list         = (known after apply)
+      + ipv6_address_list_enabled = false
+      + ipv6_addresses            = (known after apply)
+      + ipv6_prefix_count         = (known after apply)
+      + ipv6_prefixes             = (known after apply)
+      + mac_address               = (known after apply)
+      + outpost_arn               = (known after apply)
+      + owner_id                  = (known after apply)
+      + private_dns_name          = (known after apply)
+      + private_ip                = (known after apply)
+      + private_ip_list           = (known after apply)
+      + private_ip_list_enabled   = false
+      + private_ips               = [
+          + "192.168.1.9",
+        ]
+      + private_ips_count         = (known after apply)
+      + security_groups           = (known after apply)
+      + source_dest_check         = true
+      + subnet_id                 = (known after apply)
+      + tags                      = {
+          + "Name" = "diplom-private-network_interface-monitoring_node"
+        }
+      + tags_all                  = {
+          + "Name" = "diplom-private-network_interface-monitoring_node"
+        }
+
+      + attachment {
+          + attachment_id = (known after apply)
+          + device_index  = (known after apply)
+          + instance      = (known after apply)
+        }
+    }
+
+  # aws_network_interface.diplom-private-network_interface-web_node will be created
+  + resource "aws_network_interface" "diplom-private-network_interface-web_node" {
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + interface_type            = (known after apply)
+      + ipv4_prefix_count         = (known after apply)
+      + ipv4_prefixes             = (known after apply)
+      + ipv6_address_count        = (known after apply)
+      + ipv6_address_list         = (known after apply)
+      + ipv6_address_list_enabled = false
+      + ipv6_addresses            = (known after apply)
+      + ipv6_prefix_count         = (known after apply)
+      + ipv6_prefixes             = (known after apply)
+      + mac_address               = (known after apply)
+      + outpost_arn               = (known after apply)
+      + owner_id                  = (known after apply)
+      + private_dns_name          = (known after apply)
+      + private_ip                = (known after apply)
+      + private_ip_list           = (known after apply)
+      + private_ip_list_enabled   = false
+      + private_ips               = [
+          + "192.168.1.6",
+        ]
+      + private_ips_count         = (known after apply)
+      + security_groups           = (known after apply)
+      + source_dest_check         = true
+      + subnet_id                 = (known after apply)
+      + tags                      = {
+          + "Name" = "diplom-private-network_interface-web_node"
+        }
+      + tags_all                  = {
+          + "Name" = "diplom-private-network_interface-web_node"
+        }
+
+      + attachment {
+          + attachment_id = (known after apply)
+          + device_index  = (known after apply)
+          + instance      = (known after apply)
+        }
+    }
+
+  # aws_network_interface.diplom-public-network_interface-rproxy will be created
+  + resource "aws_network_interface" "diplom-public-network_interface-rproxy" {
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + interface_type            = (known after apply)
+      + ipv4_prefix_count         = (known after apply)
+      + ipv4_prefixes             = (known after apply)
+      + ipv6_address_count        = (known after apply)
+      + ipv6_address_list         = (known after apply)
+      + ipv6_address_list_enabled = false
+      + ipv6_addresses            = (known after apply)
+      + ipv6_prefix_count         = (known after apply)
+      + ipv6_prefixes             = (known after apply)
+      + mac_address               = (known after apply)
+      + outpost_arn               = (known after apply)
+      + owner_id                  = (known after apply)
+      + private_dns_name          = (known after apply)
+      + private_ip                = (known after apply)
+      + private_ip_list           = (known after apply)
+      + private_ip_list_enabled   = false
+      + private_ips               = [
+          + "192.168.0.4",
+        ]
+      + private_ips_count         = (known after apply)
+      + security_groups           = (known after apply)
+      + source_dest_check         = true
+      + subnet_id                 = (known after apply)
+      + tags                      = {
+          + "Name" = "diplom-public-network_interface-rproxy"
+        }
+      + tags_all                  = {
+          + "Name" = "diplom-public-network_interface-rproxy"
+        }
+
+      + attachment {
+          + attachment_id = (known after apply)
+          + device_index  = (known after apply)
+          + instance      = (known after apply)
+        }
+    }
+
+  # aws_route_table.diplom-route-table-private-via-nat will be created
+  + resource "aws_route_table" "diplom-route-table-private-via-nat" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = [
+          + {
+              + carrier_gateway_id         = ""
+              + cidr_block                 = "0.0.0.0/0"
+              + destination_prefix_list_id = ""
+              + egress_only_gateway_id     = ""
+              + gateway_id                 = (known after apply)
+              + instance_id                = ""
+              + ipv6_cidr_block            = ""
+              + local_gateway_id           = ""
+              + nat_gateway_id             = ""
+              + network_interface_id       = ""
+              + transit_gateway_id         = ""
+              + vpc_endpoint_id            = ""
+              + vpc_peering_connection_id  = ""
+            },
+        ]
+      + tags             = {
+          + "Name" = "diplom-route-table-private-via-nat"
+        }
+      + tags_all         = {
+          + "Name" = "diplom-route-table-private-via-nat"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.diplom-private1-to-NAT-route_table-assoc will be created
+  + resource "aws_route_table_association" "diplom-private1-to-NAT-route_table-assoc" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_security_group.allow_all_output will be created
+  + resource "aws_security_group" "allow_all_output" {
+      + arn                    = (known after apply)
+      + description            = "Allow All Output traffic"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = ""
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "allow_output"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name" = "diplom_allow_all_output"
+        }
+      + tags_all               = {
+          + "Name" = "diplom_allow_all_output"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_security_group.allow_internal_traffic will be created
+  + resource "aws_security_group" "allow_internal_traffic" {
+      + arn                    = (known after apply)
+      + description            = "Allow internal_traffic"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "192.168.0.0/16",
+                ]
+              + description      = ""
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "192.168.0.0/16",
+                ]
+              + description      = ""
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+            },
+        ]
+      + name                   = "allow_internal_traffic"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name" = "diplom_allow_internal_traffic"
+        }
+      + tags_all               = {
+          + "Name" = "diplom_allow_internal_traffic"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_security_group.allow_ping will be created
+  + resource "aws_security_group" "allow_ping" {
+      + arn                    = (known after apply)
+      + description            = "Allow ping"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = ""
+              + from_port        = -1
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "icmp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = -1
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = ""
+              + from_port        = -1
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "icmp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = -1
+            },
+        ]
+      + name                   = "allow_ping"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name" = "diplom_allow_ping"
+        }
+      + tags_all               = {
+          + "Name" = "diplom_allow_ping"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_security_group.allow_ssh will be created
+  + resource "aws_security_group" "allow_ssh" {
+      + arn                    = (known after apply)
+      + description            = "Allow ssh inbound traffic"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "SSH to VMs"
+              + from_port        = 22
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
+            },
+        ]
+      + name                   = "allow_ssh"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name" = "diplom_allow_ssh"
+        }
+      + tags_all               = {
+          + "Name" = "diplom_allow_ssh"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_security_group.allow_web will be created
+  + resource "aws_security_group" "allow_web" {
+      + arn                    = (known after apply)
+      + description            = "Allow web inbound traffic"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "http to VMs"
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "https to VMs"
+              + from_port        = 443
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 443
+            },
+        ]
+      + name                   = "allow_web"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name" = "diplom_allow_web"
+        }
+      + tags_all               = {
+          + "Name" = "diplom_allow_web"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_subnet.diplom-private-subnet-1 will be created
+  + resource "aws_subnet" "diplom-private-subnet-1" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "192.168.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "diplom-private-Subnet-1"
+        }
+      + tags_all                                       = {
+          + "Name" = "diplom-private-Subnet-1"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.diplom-private-subnet-2 will be created
+  + resource "aws_subnet" "diplom-private-subnet-2" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "192.168.2.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "diplom-private-Subnet-2"
+        }
+      + tags_all                                       = {
+          + "Name" = "diplom-private-Subnet-2"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.diplom-public-subnet will be created
+  + resource "aws_subnet" "diplom-public-subnet" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "192.168.0.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "diplom-public-Subnet"
+        }
+      + tags_all                                       = {
+          + "Name" = "diplom-public-Subnet"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_vpc.diplom-vpc will be created
+  + resource "aws_vpc" "diplom-vpc" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "192.168.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_classiclink                   = (known after apply)
+      + enable_classiclink_dns_support       = (known after apply)
+      + enable_dns_hostnames                 = (known after apply)
+      + enable_dns_support                   = true
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + tags                                 = {
+          + "Name" = "diplom-vpc"
+        }
+      + tags_all                             = {
+          + "Name" = "diplom-vpc"
+        }
+    }
+
+  # cloudflare_record.diplom_domain-l2-record will be created
+  + resource "cloudflare_record" "diplom_domain-l2-record" {
+      + allow_overwrite = true
+      + created_on      = (known after apply)
+      + hostname        = (known after apply)
+      + id              = (known after apply)
+      + metadata        = (known after apply)
+      + modified_on     = (known after apply)
+      + name            = "@"
+      + proxiable       = (known after apply)
+      + ttl             = 60
+      + type            = "A"
+      + value           = (known after apply)
+      + zone_id         = "8b593594cfe4ab6f759b50457ca69118"
+    }
+
+  # cloudflare_record.diplom_domain-l3-record-alertmanager will be created
+  + resource "cloudflare_record" "diplom_domain-l3-record-alertmanager" {
+      + allow_overwrite = true
+      + created_on      = (known after apply)
+      + hostname        = (known after apply)
+      + id              = (known after apply)
+      + metadata        = (known after apply)
+      + modified_on     = (known after apply)
+      + name            = "alertmanager"
+      + proxiable       = (known after apply)
+      + ttl             = 60
+      + type            = "CNAME"
+      + value           = "citytours.ge"
+      + zone_id         = "8b593594cfe4ab6f759b50457ca69118"
+    }
+
+  # cloudflare_record.diplom_domain-l3-record-gitlab will be created
+  + resource "cloudflare_record" "diplom_domain-l3-record-gitlab" {
+      + allow_overwrite = true
+      + created_on      = (known after apply)
+      + hostname        = (known after apply)
+      + id              = (known after apply)
+      + metadata        = (known after apply)
+      + modified_on     = (known after apply)
+      + name            = "gitlab"
+      + proxiable       = (known after apply)
+      + ttl             = 60
+      + type            = "CNAME"
+      + value           = "citytours.ge"
+      + zone_id         = "8b593594cfe4ab6f759b50457ca69118"
+    }
+
+  # cloudflare_record.diplom_domain-l3-record-grafana will be created
+  + resource "cloudflare_record" "diplom_domain-l3-record-grafana" {
+      + allow_overwrite = true
+      + created_on      = (known after apply)
+      + hostname        = (known after apply)
+      + id              = (known after apply)
+      + metadata        = (known after apply)
+      + modified_on     = (known after apply)
+      + name            = "grafana"
+      + proxiable       = (known after apply)
+      + ttl             = 60
+      + type            = "CNAME"
+      + value           = "citytours.ge"
+      + zone_id         = "8b593594cfe4ab6f759b50457ca69118"
+    }
+
+  # cloudflare_record.diplom_domain-l3-record-prometheus will be created
+  + resource "cloudflare_record" "diplom_domain-l3-record-prometheus" {
+      + allow_overwrite = true
+      + created_on      = (known after apply)
+      + hostname        = (known after apply)
+      + id              = (known after apply)
+      + metadata        = (known after apply)
+      + modified_on     = (known after apply)
+      + name            = "prometheus"
+      + proxiable       = (known after apply)
+      + ttl             = 60
+      + type            = "CNAME"
+      + value           = "citytours.ge"
+      + zone_id         = "8b593594cfe4ab6f759b50457ca69118"
+    }
+
+  # cloudflare_record.diplom_domain-l3-record-www will be created
+  + resource "cloudflare_record" "diplom_domain-l3-record-www" {
+      + allow_overwrite = true
+      + created_on      = (known after apply)
+      + hostname        = (known after apply)
+      + id              = (known after apply)
+      + metadata        = (known after apply)
+      + modified_on     = (known after apply)
+      + name            = "www"
+      + proxiable       = (known after apply)
+      + ttl             = 60
+      + type            = "CNAME"
+      + value           = "citytours.ge"
+      + zone_id         = "8b593594cfe4ab6f759b50457ca69118"
+    }
+
+  # local_file.hosts will be created
+  + resource "local_file" "hosts" {
+      + content              = (known after apply)
+      + directory_permission = "0777"
+      + file_permission      = "0777"
+      + filename             = "../ansible/roles/common/files/hosts"
+      + id                   = (known after apply)
+    }
+
+  # local_file.inventory_full will be created
+  + resource "local_file" "inventory_full" {
+      + content              = (known after apply)
+      + directory_permission = "0777"
+      + file_permission      = "0777"
+      + filename             = "../ansible/inventory/inventory_full"
+      + id                   = (known after apply)
+    }
+
+  # tls_private_key.pk will be created
+  + resource "tls_private_key" "pk" {
+      + algorithm                     = "RSA"
+      + ecdsa_curve                   = "P224"
+      + id                            = (known after apply)
+      + private_key_openssh           = (sensitive value)
+      + private_key_pem               = (sensitive value)
+      + private_key_pem_pkcs8         = (sensitive value)
+      + public_key_fingerprint_md5    = (known after apply)
+      + public_key_fingerprint_sha256 = (known after apply)
+      + public_key_openssh            = (known after apply)
+      + public_key_pem                = (known after apply)
+      + rsa_bits                      = 4096
+    }
+
+Plan: 40 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + instance_rproxy_id        = (known after apply)
+  + instance_rproxy_local_ip  = (known after apply)
+  + instance_rproxy_public_ip = (known after apply)
+  + region                    = "us-east-1"
+
+Do you want to perform these actions in workspace "stage"?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+cloudflare_record.diplom_domain-l3-record-prometheus: Creating...
+cloudflare_record.diplom_domain-l3-record-www: Creating...
+cloudflare_record.diplom_domain-l3-record-alertmanager: Creating...
+cloudflare_record.diplom_domain-l3-record-gitlab: Creating...
+cloudflare_record.diplom_domain-l3-record-grafana: Creating...
+tls_private_key.pk: Creating...
+tls_private_key.pk: Creation complete after 2s [id=c653827361b24cb9b8ea80d726484931ea3d2d6a]
+cloudflare_record.diplom_domain-l3-record-www: Creation complete after 2s [id=d1c34c49dd929d230ce906a509b106e9]
+cloudflare_record.diplom_domain-l3-record-prometheus: Creation complete after 3s [id=307ceea58b5f225071b72c14c512994d]
+aws_vpc.diplom-vpc: Creating...
+aws_key_pair.kp: Creating...
+aws_eip.diplom-elastic-ip_for_nat-gw: Creating...
+cloudflare_record.diplom_domain-l3-record-alertmanager: Creation complete after 3s [id=5ead22b4ecab3b095c3af4382d5a574f]
+cloudflare_record.diplom_domain-l3-record-grafana: Creation complete after 3s [id=4a82ccb9770c445c83c0001d4103ee16]
+cloudflare_record.diplom_domain-l3-record-gitlab: Creation complete after 3s [id=a01c112299582fefb1e8f9cf0cbe4689]
+aws_key_pair.kp: Provisioning with 'local-exec'...
+aws_key_pair.kp (local-exec): (output suppressed due to sensitive value in config)
+aws_key_pair.kp: Provisioning with 'local-exec'...
+aws_key_pair.kp (local-exec): (output suppressed due to sensitive value in config)
+aws_key_pair.kp: Creation complete after 2s [id=alexander-key-to-aws]
+aws_eip.diplom-elastic-ip_for_nat-gw: Creation complete after 2s [id=eipalloc-036c0203234052a25]
+aws_vpc.diplom-vpc: Still creating... [10s elapsed]
+aws_vpc.diplom-vpc: Creation complete after 11s [id=vpc-0a2e3cf791359518e]
+aws_security_group.allow_internal_traffic: Creating...
+aws_subnet.diplom-private-subnet-1: Creating...
+aws_subnet.diplom-public-subnet: Creating...
+aws_internet_gateway.diplom-igw: Creating...
+aws_security_group.allow_ping: Creating...
+aws_security_group.allow_all_output: Creating...
+aws_subnet.diplom-private-subnet-2: Creating...
+aws_security_group.allow_web: Creating...
+aws_security_group.allow_ssh: Creating...
+aws_subnet.diplom-private-subnet-2: Creation complete after 3s [id=subnet-008c4bfad27979da7]
+aws_subnet.diplom-private-subnet-1: Creation complete after 3s [id=subnet-07dcdf62d6f6208bf]
+aws_internet_gateway.diplom-igw: Creation complete after 4s [id=igw-03b0b495fb6832cb2]
+aws_default_route_table.diplom-default-route-table: Creating...
+aws_security_group.allow_internal_traffic: Still creating... [10s elapsed]
+aws_subnet.diplom-public-subnet: Still creating... [10s elapsed]
+aws_security_group.allow_all_output: Still creating... [10s elapsed]
+aws_security_group.allow_ping: Still creating... [10s elapsed]
+aws_security_group.allow_web: Still creating... [10s elapsed]
+aws_security_group.allow_ssh: Still creating... [10s elapsed]
+aws_security_group.allow_web: Creation complete after 10s [id=sg-09c5e6e6d83363745]
+aws_security_group.allow_ssh: Creation complete after 10s [id=sg-02707f7ccf511db22]
+aws_security_group.allow_all_output: Creation complete after 10s [id=sg-08d26f353484420e7]
+aws_default_route_table.diplom-default-route-table: Creation complete after 6s [id=rtb-024b595e5dcac1596]
+aws_security_group.allow_ping: Creation complete after 12s [id=sg-03bf2526188069c7f]
+aws_security_group.allow_internal_traffic: Creation complete after 12s [id=sg-0592a2a03b79d0db3]
+aws_network_interface.diplom-private-network_interface-gitlabrunner_node: Creating...
+aws_network_interface.diplom-private-network_interface-web_node: Creating...
+aws_network_interface.diplom-private-network_interface-db_node[0]: Creating...
+aws_network_interface.diplom-private-network_interface-gitlab_node: Creating...
+aws_network_interface.diplom-private-network_interface-monitoring_node: Creating...
+aws_network_interface.diplom-private-network_interface-db_node[1]: Creating...
+aws_network_interface.diplom-private-network_interface-db_node[1]: Creation complete after 3s [id=eni-04796fd2a28585c2c]
+aws_network_interface.diplom-private-network_interface-monitoring_node: Creation complete after 3s [id=eni-0b58260b070c7abb4]
+aws_instance.diplom-vm-monitoring_node: Creating...
+aws_network_interface.diplom-private-network_interface-web_node: Creation complete after 3s [id=eni-069f597c26ab2fe13]
+aws_instance.diplom-vm-web_node: Creating...
+aws_network_interface.diplom-private-network_interface-gitlab_node: Creation complete after 3s [id=eni-0616e3c44fefb7ca6]
+aws_instance.diplom-vm-gitlab_node: Creating...
+aws_network_interface.diplom-private-network_interface-gitlabrunner_node: Creation complete after 3s [id=eni-0f2dc723d5137f6da]
+aws_instance.diplom-vm-gitlabrunner_node: Creating...
+aws_network_interface.diplom-private-network_interface-db_node[0]: Creation complete after 3s [id=eni-08edef9abe408afd6]
+aws_instance.diplom-vm-db_node[1]: Creating...
+aws_instance.diplom-vm-db_node[0]: Creating...
+aws_subnet.diplom-public-subnet: Creation complete after 15s [id=subnet-00f69f2f7459fc5b3]
+aws_nat_gateway.diplom-nat-gw: Creating...
+aws_network_interface.diplom-public-network_interface-rproxy: Creating...
+aws_network_interface.diplom-public-network_interface-rproxy: Creation complete after 4s [id=eni-0f4f7d7e82ebf01bb]
+aws_eip.diplom-elastic-ip-rproxy: Creating...
+aws_eip.diplom-elastic-ip-rproxy: Creation complete after 5s [id=eipalloc-02337a8e5524ef77c]
+aws_instance.diplom-vm-rproxy: Creating...
+aws_instance.diplom-vm-monitoring_node: Still creating... [10s elapsed]
+aws_instance.diplom-vm-web_node: Still creating... [10s elapsed]
+aws_instance.diplom-vm-gitlab_node: Still creating... [10s elapsed]
+aws_instance.diplom-vm-gitlabrunner_node: Still creating... [10s elapsed]
+aws_instance.diplom-vm-db_node[1]: Still creating... [10s elapsed]
+aws_instance.diplom-vm-db_node[0]: Still creating... [10s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [10s elapsed]
+aws_instance.diplom-vm-rproxy: Still creating... [10s elapsed]
+aws_instance.diplom-vm-monitoring_node: Still creating... [20s elapsed]
+aws_instance.diplom-vm-web_node: Still creating... [20s elapsed]
+aws_instance.diplom-vm-gitlab_node: Still creating... [20s elapsed]
+aws_instance.diplom-vm-gitlabrunner_node: Still creating... [20s elapsed]
+aws_instance.diplom-vm-db_node[1]: Still creating... [20s elapsed]
+aws_instance.diplom-vm-db_node[0]: Still creating... [20s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [20s elapsed]
+aws_instance.diplom-vm-monitoring_node: Creation complete after 22s [id=i-0014ccb4a7bb03463]
+aws_instance.diplom-vm-gitlabrunner_node: Creation complete after 22s [id=i-081f80d1692892f4c]
+aws_instance.diplom-vm-gitlab_node: Creation complete after 23s [id=i-082f3876f6503b6ed]
+aws_instance.diplom-vm-db_node[0]: Creation complete after 27s [id=i-00290534c47e6ce52]
+aws_instance.diplom-vm-rproxy: Still creating... [20s elapsed]
+aws_instance.diplom-vm-web_node: Still creating... [30s elapsed]
+aws_instance.diplom-vm-db_node[1]: Still creating... [30s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [30s elapsed]
+aws_instance.diplom-vm-db_node[1]: Creation complete after 34s [id=i-065ab000ab7baa965]
+aws_instance.diplom-vm-rproxy: Still creating... [30s elapsed]
+aws_instance.diplom-vm-web_node: Still creating... [40s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [40s elapsed]
+aws_instance.diplom-vm-web_node: Creation complete after 45s [id=i-0be57f479e412c381]
+aws_instance.diplom-vm-rproxy: Still creating... [40s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [50s elapsed]
+aws_instance.diplom-vm-rproxy: Creation complete after 45s [id=i-0d8314c915133bfa7]
+cloudflare_record.diplom_domain-l2-record: Creating...
+local_file.hosts: Creating...
+local_file.inventory_full: Creating...
+local_file.hosts: Creation complete after 0s [id=6156c71793b15bd7b5203435384a1e681af25648]
+local_file.inventory_full: Creation complete after 0s [id=c38937b3885b2f5621017d05b540a0df06a4b4db]
+cloudflare_record.diplom_domain-l2-record: Creation complete after 2s [id=93cd1808734cf98573ff9c05be7f1696]
+aws_nat_gateway.diplom-nat-gw: Still creating... [1m0s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [1m10s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [1m20s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [1m30s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [1m40s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [1m50s elapsed]
+aws_nat_gateway.diplom-nat-gw: Still creating... [2m0s elapsed]
+aws_nat_gateway.diplom-nat-gw: Creation complete after 2m2s [id=nat-051d2f8d282198357]
+aws_route_table.diplom-route-table-private-via-nat: Creating...
+aws_route_table.diplom-route-table-private-via-nat: Creation complete after 10s [id=rtb-0b2ca2a4f57f0f2c0]
+aws_route_table_association.diplom-private1-to-NAT-route_table-assoc: Creating...
+aws_route_table_association.diplom-private1-to-NAT-route_table-assoc: Creation complete after 5s [id=rtbassoc-03a4ac73583f17c6a]
+
+Apply complete! Resources: 40 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+instance_rproxy_id = "i-0d8314c915133bfa7"
+instance_rproxy_local_ip = "192.168.0.4"
+instance_rproxy_public_ip = "54.166.105.195"
+region = "us-east-1"

@@ -66,8 +66,3 @@
     gitlab-runner register --non-interactive --url "http://{{ variables.gitlab_node_hostname  }}" --registration-token "{{ variables.gitlab_runner_init_token }}"
     --executor "docker"  --docker-image "alpine:latest" --description "docker-runner" --maintenance-note "this runner can makes all"
     --tag-list "docker,aws" --run-untagged="true" --locked="false" --access-level="not_protected" --docker-network-mode="host" --docker-volumes "/home/ubuntu/.ssh:/ssh"
-
-#    gitlab-runner register --non-interactive --url "http://{{ variables.gitlab_node_hostname  }}" --registration-token "{{ variables.gitlab_runner_init_token }}"
-#    --executor "docker"  --docker-image "ubuntu:latest" --description "docker-runner" --maintenance-note "this runner can makes all"
-#    --tag-list "docker,aws" --run-untagged="true" --locked="false" --access-level="not_protected" --docker-network-mode="host" --docker-volumes "/home/ubuntu/.ssh:/ssh"
-
